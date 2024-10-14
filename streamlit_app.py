@@ -12,14 +12,17 @@ def load_data():
 
 # Function to train Random Forest model
 def train_model(df):
-    # Select relevant features
-    X = df[['amount_usd', 'transaction_type', 'source_of_money', 'country', 'destination_country']]
+    # Check the actual column names
+    print(df.columns)
+
+    # Select relevant features (Update this based on actual column names)
+    X = df[['Amount (USD)', 'Transaction Type', 'Source of Money', 'Country', 'Destination Country']]
     
     # Convert categorical variables to numerical (one-hot encoding)
     X = pd.get_dummies(X, drop_first=True)
     
     # Define target variable
-    y = df['risk_score'].apply(lambda x: 1 if x >= 8 else 0)  # 1 for high-risk, 0 for low-risk
+    y = df['Money Laundering Risk Score'].apply(lambda x: 1 if x >= 8 else 0)  # 1 for high-risk, 0 for low-risk
     
     # Train the Random Forest model
     rf = RandomForestClassifier(n_estimators=100, random_state=1)
@@ -47,14 +50,14 @@ st.header("Input Features for Transaction")
 amount_usd = st.number_input("Transaction Amount (USD)", min_value=1000, max_value=5000000, value=10000)
 
 # Categorical inputs (encoded as strings initially)
-transaction_type = st.selectbox("Transaction Type", ["Offshore Transfer", "Stocks Transfer", "Cash Withdrawal", "Cryptocurrency", "Property Purchase"])
-source_of_money = st.selectbox("Source of Money", ["Legal", "Illegal"])
-country = st.selectbox("Origin Country", df['country'].unique())
-destination_country = st.selectbox("Destination Country", df['destination_country'].unique())
+transaction_type = st.selectbox("Transaction Type", df['Transaction Type'].unique())
+source_of_money = st.selectbox("Source of Money", df['Source of Money'].unique())
+country = st.selectbox("Origin Country", df['Country'].unique())
+destination_country = st.selectbox("Destination Country", df['Destination Country'].unique())
 
 # Prepare the input data for prediction
 input_data = pd.DataFrame([[amount_usd, transaction_type, source_of_money, country, destination_country]], 
-                          columns=['amount_usd', 'transaction_type', 'source_of_money', 'country', 'destination_country'])
+                          columns=['Amount (USD)', 'Transaction Type', 'Source of Money', 'Country', 'Destination Country'])
 
 # Encode the input data using the same encoding as the training data
 input_data_encoded = pd.get_dummies(input_data)
