@@ -23,8 +23,12 @@ def load_data():
 
 # Function to train Random Forest model
 def train_model(df):
-    # Define features and target
-    X = df.drop(columns=['risk_score', 'transaction_id', 'person_involved', 'transaction_date'])
+    # Check if columns exist before dropping them
+    columns_to_drop = ['risk_score', 'transaction_id', 'person_involved', 'transaction_date']
+    columns_in_data = [col for col in columns_to_drop if col in df.columns]
+    
+    # Drop target & unnecessary columns
+    X = df.drop(columns=columns_in_data)
     y = df['risk_score'].apply(lambda x: 1 if x >= 8 else 0)  # Binary classification (high-risk = 1, low-risk = 0)
 
     # One-hot encode categorical variables
