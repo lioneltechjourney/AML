@@ -47,7 +47,7 @@ model, feature_columns = train_model(df)
 # User inputs for the features
 st.header("Input Features for Transaction")
 
-amount_usd = st.number_input("Transaction Amount (USD)", min_value=1000, max_value=5000000, value=10000)
+amount_usd = st.number_input("Transaction Amount (USD)", min_value=1000, max_value=100000000, value=10000)
 
 # Categorical inputs (encoded as strings initially)
 transaction_type = st.selectbox("Transaction Type", df['Transaction Type'].unique())
